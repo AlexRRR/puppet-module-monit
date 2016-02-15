@@ -43,12 +43,18 @@ class monit::params {
       $logrotate_script = '/etc/logrotate.d/monit'
       case $::operatingsystem {
         'Debian': {
-          case $::lsbdistcodename {
-            'squeeze': { $service_has_status = false }
-            default:   { $service_has_status = true }
-          }
           $logrotate_source = 'logrotate.debian.erb'
           $default_conf_tpl = 'monit.default.conf.ubuntu.maverick.erb'
+          case $::lsbdistcodename {
+            'squeeze': {
+              $service_has_status = false
+             }
+            'wheezy': {
+              $service_has_status = true
+              $default_conf_tpl = 'monit.default.conf.ubuntu.precise.erb'
+            }
+            default:   { $service_has_status = true }
+          }
         }
         'Ubuntu': {
           $logrotate_source   = 'logrotate.ubuntu.erb'
